@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VESPER Compatibility</title><meta name="description" content="What VESPER moves from one mixing console's show file to another's, setting by setting, for every pair of consoles.">
+<style>
+:root{--bg:#ffffff;--ink:#1b1d21;--ink2:#2e3138;--dim:#5a5f69;--dim2:#6b7079;--rule:#e3e5e9;--rule2:#eceef1;--accent:#b8740f;--accent2:#8f5a0b;--card:#f6f7f9;--surface:#ffffff;--hover:#f1f2f4;--cellhover:#e6e8ec;--on:#fbf1e1;--col:rgba(184,116,15,.08);--grey:#868b95;--btnborder:#d4d7dc}
+@media (prefers-color-scheme:dark){:root{--bg:#0E0F11;--ink:#ECECEE;--ink2:#D6D7DA;--dim:#B4B7BD;--dim2:#85888F;--rule:#2A2C30;--rule2:#1E2023;--accent:#E8A33D;--accent2:#F2BD6B;--card:#17181B;--surface:#141517;--hover:#1A1B1E;--cellhover:#26272B;--on:#2A2520;--col:rgba(232,163,61,.09);--grey:#6B6E75;--btnborder:#3B3E44}}
+*{box-sizing:border-box}
+button{-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+header.site,main,footer{max-width:1440px;margin:0 auto;padding:0 32px}
+header.site{display:flex;align-items:center;justify-content:space-between;padding-top:28px;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.brand{font-weight:700;letter-spacing:.08em;color:var(--ink);text-decoration:none}
+nav.site a{color:var(--dim);text-decoration:none;margin-left:18px;font-size:15px}
+nav.site a[aria-current=page]{color:var(--ink)}
+a{color:var(--accent)}a:hover{color:var(--accent2)}
+footer{border-top:1px solid var(--rule);margin-top:48px;padding-top:18px;padding-bottom:40px;color:var(--dim);font-size:13px}
+
+main{padding-top:48px;display:flex;flex-direction:column;gap:28px}
+.intro{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:13px;font-weight:600;color:var(--accent)}
+h1{margin:0;font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:700;letter-spacing:-.02em}
+.lead{margin:0;font-size:17px;line-height:1.5;color:var(--dim);max-width:760px}
+
+/* symbols */
+.sym{width:16px;height:16px;flex:none;display:block}
+.ra{stroke:var(--accent)}.rg{stroke:var(--grey)}
+.fa{fill:var(--accent)}.fg{fill:var(--dim2)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0;list-style:none;font-size:13px;color:var(--dim)}
+.legend li{display:inline-flex;align-items:center;gap:7px}
+
+.layout{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.pane{flex:1 1 220px;max-width:240px;display:flex;flex-direction:column;gap:14px}
+.pane-title{font-size:13px;font-weight:600;color:var(--ink);padding-left:10px}
+.maker{font-size:11.5px;font-weight:600;color:var(--dim2);margin:0 0 4px 10px}
+.src{display:flex;align-items:center;width:100%;min-height:36px;padding:0 10px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--dim);font:500 14.5px/1.2 inherit;font-family:inherit;text-align:left;cursor:pointer}
+.src:hover{background:var(--hover);color:var(--ink)}
+.src[aria-pressed=true]{background:var(--on);border-color:var(--accent);color:var(--ink);font-weight:600}
+.src:focus-visible,.tbtn:focus-visible,.gbtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.box{flex:999 1 640px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.bar-top{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap}
+.from{font-size:20px;font-weight:700}
+.spacer{flex:1}
+.tbtn{font:500 13px/1.2 inherit;font-family:inherit;padding:8px 12px;border-radius:8px;color:var(--dim);background:var(--card);border:1px solid var(--btnborder);cursor:pointer}
+.tbtn:hover{color:var(--ink)}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--dim);cursor:pointer}
+.chk input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.detail{position:sticky;top:8px;z-index:3;min-height:46px;display:flex;align-items:center;gap:6px 12px;flex-wrap:wrap;padding:10px 16px;border-radius:10px;background:var(--card);border:1px solid var(--rule);font-size:14px;line-height:1.4;color:var(--dim)}
+.detail b{color:var(--ink)}
+.detail .ver{color:var(--dim2)}
+
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:12px;background:var(--surface);-webkit-overflow-scrolling:touch}
+.tbl{min-width:960px}
+.r{display:grid;grid-template-columns:var(--namecol,250px) repeat(12,minmax(58px,1fr));align-items:center}
+.r>:first-child{position:sticky;left:0;z-index:1;background:inherit;align-self:stretch;display:flex;align-items:center}
+.hd,.sum{background:var(--surface)}
+.hd{border-bottom:1px solid var(--rule);padding:12px 0 10px}
+.hd>:first-child,.sum>:first-child{padding-left:16px;font-size:12px;color:var(--dim2);font-weight:600}
+.sum>:first-child{font-weight:400}
+.hc{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:0 2px;align-self:stretch;justify-content:center}
+.hc b{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.15}
+.hc i{font-style:normal;font-size:11px;color:var(--dim2);line-height:1.3}
+.col-on{background:var(--col)}
+.sum{border-bottom:1px solid var(--rule);padding:8px 0}
+.sc{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;align-self:stretch;justify-content:center}
+.meter{width:36px;height:4px;border-radius:2px;background:var(--rule);overflow:hidden;display:block}
+.meter span{display:block;height:100%;background:var(--accent)}
+.ghr{border-top:1px solid var(--rule);background:var(--card)}
+.gbtn{display:flex;align-items:center;gap:9px;min-height:42px;width:100%;padding:0 16px;background:transparent;border:0;color:var(--accent);font:700 13.5px/1.2 inherit;font-family:inherit;cursor:pointer;text-align:left}
+.gbtn:hover{color:var(--accent2)}
+.gbtn i{font-style:normal;font-weight:500;color:var(--dim2)}
+.gbtn svg{flex:none;transition:transform .12s}
+.gbtn[aria-expanded=true] svg{transform:rotate(90deg)}
+.gbtn path{stroke:var(--accent)}
+.gs{display:flex;align-items:center;justify-content:center;height:100%;min-height:42px;font-size:12px;font-weight:600;color:var(--dim);font-variant-numeric:tabular-nums}
+.row{border-top:1px solid var(--rule2);background:var(--surface)}
+.row:hover{background:var(--hover)}
+.cn{padding:7px 16px;font-size:13.5px;color:var(--ink2);line-height:1.25}
+.cw{display:flex;align-items:center;justify-content:center;align-self:stretch}
+.cell{display:flex;align-items:center;justify-content:center;width:100%;height:32px;background:transparent;border:0;padding:0;cursor:pointer;border-radius:6px;color:inherit}
+.cell:hover,.cell:focus-visible,.cell[aria-current=true]{background:var(--cellhover);outline:none}
+.cell:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.foot{font-size:12.5px;color:var(--dim2)}
+.status{color:var(--dim2);font-size:15px}
+
+@media (max-width:760px){
+  header.site,main,footer{padding-left:16px;padding-right:16px}
+  main{padding-top:32px}
+  .from{flex-basis:100%}
+  .spacer{display:none}
+  .pane{max-width:none;flex-basis:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 14px}
+  .pane-title{grid-column:1/-1}
+  .r{--namecol:150px}
+  .tbl{min-width:calc(150px + 12*58px)}
+  .cn{padding:7px 10px 7px 12px;font-size:13px}
+  .gbtn{padding:0 10px 0 12px}
+  .hd>:first-child,.sum>:first-child{padding-left:12px}
+}
+</style></head><body>
+<header class="site"><a class="brand" href="index.html">VESPER</a><nav class="site"><a href="compatibility.html" aria-current="page">Compatibility</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav></header>
+<main>
+<div class="intro">
+<div class="eyebrow">VESPER compatibility</div>
+<h1>What moves from your console to theirs</h1>
+<p class="lead">Pick the console your show is on. Every console VESPER writes is across the top, your own included, and each row is a setting.</p>
+<ul class="legend" id="legend" aria-label="Key"></ul>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="s-T" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="ra" stroke-width="1.5"/><path class="fa" d="M8 1.5a6.5 6.5 0 1 1 0 13a6.5 6.5 0 1 1 0-13z"/></symbol>
+<symbol id="s-A" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="ra" stroke-width="1.5"/><path class="fa" d="M8 8V1.5a6.5 6.5 0 1 1 -6.5 6.5z"/></symbol>
+<symbol id="s-P" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="ra" stroke-width="1.5"/><path class="fa" d="M8 1.5a6.5 6.5 0 0 1 0 13z"/></symbol>
+<symbol id="s-W" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="ra" stroke-width="1.5" stroke-dasharray="2.4 2"/></symbol>
+<symbol id="s-N" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="rg" stroke-width="1.5"/></symbol>
+<symbol id="s-S" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="rg" stroke-width="1.5"/><circle cx="8" cy="8" r="2.6" class="fg"/></symbol>
+<symbol id="s-Q" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" class="rg" stroke-width="1.5" stroke-dasharray="1 2.2"/><text x="8" y="11.6" text-anchor="middle" font-size="10" font-weight="700" class="fg" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif">?</text></symbol>
+<symbol id="s-X" viewBox="0 0 16 16"><text x="8" y="11.6" text-anchor="middle" font-size="10" font-weight="700" class="fg" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif">–</text></symbol>
+</defs>
+</svg>
+
+<p class="status" id="status">Loading the matrix…</p>
+<noscript><p class="status">This table needs JavaScript.</p></noscript>
+
+<div class="layout" id="app" hidden>
+<nav class="pane" id="pane" aria-label="Source console"></nav>
+<div class="box">
+<div class="bar-top">
+<span class="from" id="from"></span>
+<span class="spacer"></span>
+<button class="tbtn" type="button" id="expand">Expand all</button>
+<button class="tbtn" type="button" id="collapse">Collapse all</button>
+<label class="chk"><input type="checkbox" id="hidena" checked> <span id="hidelabel"></span></label>
+</div>
+<div class="detail" id="detail" aria-live="polite"></div>
+<div class="scroll" id="scroll"><div class="tbl" id="tbl"></div></div>
+<div class="foot" id="foot"></div>
+</div>
+</div>
+</main>
+<footer><p>VESPER is an independent software product and is not affiliated with, endorsed by, or sponsored by the manufacturers referenced within the application. Allen &amp; Heath, Avid, Behringer, DiGiCo, Midas, Solid State Logic and Yamaha are trademarks of their respective owners, used only to identify compatibility.</p><p>© 2026 MC Audio</p></footer>
+
+<script>
+(function () {
+  // transfer-matrix.json is docs/transfer-matrix/transfer-matrix.json, read as generated.
+  var DATA = 'transfer-matrix.json';
+  var CODE = { transfers: 'T', adjusted: 'A', partial: 'P', in_progress: 'W', not_transferred: 'N', same_console_only: 'S', not_checked: 'Q', not_applicable: 'X' };
+  var LEGEND = ['transfers', 'adjusted', 'partial', 'in_progress', 'not_transferred', 'same_console_only', 'not_checked', 'not_applicable'];
+  var HINT = 'Point at any symbol to see what it means for that pair.';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var sym = function (code) { return '<svg class="sym" aria-hidden="true"><use href="#s-' + code + '"/></svg>'; };
+
+  var d, cons, label = {}, pairs = {}, state = { src: 'wing', hideNA: true, open: {}, hov: null };
+
+  function pct(m, n) { return n ? Math.round(100 * m / n) : null; }
+  function score(code) { return code === 'T' || code === 'A' ? 1 : code === 'P' ? 0.5 : 0; }
+  function cell(src, dst, conceptId) { var p = pairs[src + '>' + dst]; return p && p.cells[conceptId]; }
+  function codeOf(c) { return c ? (CODE[c[0]] || 'Q') : 'X'; }
+
+  function legend() {
+    $('legend').innerHTML = LEGEND.map(function (id) {
+      var text = id === 'not_applicable' ? 'Not on this console' : (label[id] || id);
+      return '<li>' + sym(CODE[id]) + esc(text) + '</li>';
+    }).join('');
+  }
+
+  function render() {
+    var src = state.src, srcObj = cons.filter(function (c) { return c.id === src; })[0];
+    if (!srcObj) { srcObj = cons[0]; src = state.src = srcObj.id; }
+
+    // Source pane, grouped by maker in the JSON's order.
+    var makers = [];
+    cons.forEach(function (c) {
+      var m = makers.filter(function (x) { return x.name === c.maker; })[0];
+      if (!m) { m = { name: c.maker, items: [] }; makers.push(m); }
+      m.items.push(c);
+    });
+    $('pane').innerHTML = '<div class="pane-title">Your show is on</div>' + makers.map(function (m) {
+      return '<div><div class="maker">' + esc(m.name) + '</div>' + m.items.map(function (c) {
+        return '<button class="src" type="button" data-src="' + esc(c.id) + '" aria-pressed="' + (c.id === src) + '"' +
+          (c.models && c.models.length ? ' title="' + esc(c.models.join(', ')) + '"' : '') + '>' + esc(c.name) + '</button>';
+      }).join('') + '</div>';
+    }).join('');
+
+    $('from').textContent = 'From ' + srcObj.name;
+
+    // Per concept: one code per destination, and whether the source has it at all.
+    var groups = [], naCount = 0;
+    var totals = cons.map(function () { return { m: 0, n: 0 }; });
+    d.concepts.forEach(function (cc, i) {
+      var cells = cons.map(function (c) { return cell(src, c.id, cc.id); });
+      var codes = cells.map(codeOf);
+      codes.forEach(function (k, j) { if (k !== 'X') { totals[j].n++; totals[j].m += score(k); } });
+      var allNA = codes.every(function (k) { return k === 'X'; });
+      if (allNA) naCount++;
+      if (allNA && state.hideNA) return;
+      var g = groups.filter(function (x) { return x.name === cc.group; })[0];
+      if (!g) { g = { name: cc.group, rows: [] }; groups.push(g); }
+      g.rows.push({ i: i, name: cc.name, codes: codes });
+    });
+
+    $('hidelabel').textContent = 'Hide settings the ' + srcObj.name + " doesn't have (" + naCount + ')';
+    $('hidena').checked = state.hideNA;
+
+    var colCls = function (c, base) { return base + (c.id === src ? ' col-on' : ''); };
+    var html = '<div class="r hd"><span>To →</span>' + cons.map(function (c) {
+      return '<div class="' + colCls(c, 'hc') + '"' + (c.models && c.models.length ? ' title="' + esc(c.models.join(', ')) + '"' : '') + '><b>' + esc(c.name) + '</b><i>' + (c.id === src ? 'Same console' : esc(c.maker)) + '</i></div>';
+    }).join('') + '</div>';
+
+    html += '<div class="r sum"><span>Settings that move</span>' + cons.map(function (c, j) {
+      var p = pct(totals[j].m, totals[j].n);
+      return '<div class="' + colCls(c, 'sc') + '">' + (p === null ? '–' : p + '%') + '<span class="meter" aria-hidden="true"><span style="width:' + (p || 0) + '%"></span></span></div>';
+    }).join('') + '</div>';
+
+    groups.forEach(function (g, gi) {
+      var open = !!state.open[g.name];
+      html += '<div class="r ghr"><button class="gbtn" type="button" data-group="' + esc(g.name) + '" aria-expanded="' + open + '">' +
+        '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 2l3 3-3 3" fill="none" stroke-width="1.6"/></svg>' +
+        esc(g.name) + ' <i>' + g.rows.length + '</i></button>' +
+        cons.map(function (c, j) {
+          var m = 0, n = 0;
+          g.rows.forEach(function (w) { var k = w.codes[j]; if (k === 'X') return; n++; m += score(k); });
+          var p = pct(m, n);
+          return '<span class="' + colCls(c, 'gs') + '">' + (p === null ? '–' : p + '%') + '</span>';
+        }).join('') + '</div>';
+      if (!open) return;
+      g.rows.forEach(function (w) {
+        html += '<div class="r row"><span class="cn">' + esc(w.name) + '</span>' + w.codes.map(function (k, j) {
+          var lab = k === 'X' ? label.not_applicable : label[pairs[src + '>' + cons[j].id].cells[d.concepts[w.i].id][0]];
+          var cur = state.hov && state.hov.i === w.i && state.hov.j === j;
+          return '<span class="' + colCls(cons[j], 'cw') + '"><button class="cell" type="button" data-i="' + w.i + '" data-j="' + j + '"' +
+            (cur ? ' aria-current="true"' : '') + ' aria-label="' + esc(w.name + ', ' + cons[j].name + ': ' + (lab || '')) + '">' + sym(k) + '</button></span>';
+        }).join('') + '</div>';
+      });
+    });
+    $('tbl').innerHTML = html;
+
+    detail();
+    $('foot').textContent = 'Data: ' + d.matrix_version + '. Rows hidden above are ones the ' + srcObj.name + ' has nothing for.';
+  }
+
+  function detail() {
+    var el = $('detail');
+    if (!state.hov) { el.innerHTML = '<span>' + HINT + '</span>'; return; }
+    var i = state.hov.i, j = state.hov.j, src = state.src;
+    var srcObj = cons.filter(function (c) { return c.id === src; })[0], dst = cons[j], cc = d.concepts[i];
+    var c = cell(src, dst.id, cc.id), k = codeOf(c);
+    var lab = c ? (label[c[0]] || c[0]) : label.not_applicable;
+    var note = c && c[2] !== null && c[2] !== undefined && d.notes[c[2]] !== undefined ? ' · ' + esc(d.notes[c[2]]) : '';
+    var ver = c && c[1] === true ? '<span class="ver">Verified in both consoles’ software</span>' : '';
+    el.innerHTML = sym(k) + '<span><b>' + esc(srcObj.name + ' → ' + dst.name) + '</b> · ' + esc(cc.name) + '</span><span><b>' + esc(lab) + '</b>' + note + '</span>' + ver;
+  }
+
+  function pointAt(btn) {
+    var i = +btn.getAttribute('data-i'), j = +btn.getAttribute('data-j');
+    if (state.hov && state.hov.i === i && state.hov.j === j) return;
+    var prev = document.querySelector('.cell[aria-current=true]');
+    if (prev) prev.removeAttribute('aria-current');
+    btn.setAttribute('aria-current', 'true');
+    state.hov = { i: i, j: j };
+    detail();
+  }
+
+  function setHash() {
+    try { history.replaceState(null, '', '#from=' + encodeURIComponent(state.src)); } catch (e) {}
+  }
+
+  function wire() {
+    $('pane').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-src]'); if (!b) return;
+      state.src = b.getAttribute('data-src'); state.hov = null; setHash(); render();
+    });
+    var tbl = $('tbl');
+    tbl.addEventListener('click', function (e) {
+      var g = e.target.closest('[data-group]');
+      if (g) { var n = g.getAttribute('data-group'); state.open[n] = !state.open[n]; render(); var again = tbl.querySelector('[data-group="' + CSS.escape(n) + '"]'); if (again) again.focus(); return; }
+      var c = e.target.closest('.cell'); if (c) pointAt(c);
+    });
+    tbl.addEventListener('pointerover', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      var c = e.target.closest('.cell'); if (c) pointAt(c);
+    });
+    tbl.addEventListener('focusin', function (e) { var c = e.target.closest('.cell'); if (c) pointAt(c); });
+    $('expand').addEventListener('click', function () {
+      d.concepts.forEach(function (cc) { state.open[cc.group] = true; }); render();
+    });
+    $('collapse').addEventListener('click', function () { state.open = {}; render(); });
+    $('hidena').addEventListener('change', function (e) { state.hideNA = e.target.checked; state.hov = null; render(); });
+  }
+
+  fetch(DATA, { cache: 'no-cache' }).then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (json) {
+    d = json; cons = d.consoles;
+    d.categories.forEach(function (c) { label[c.id] = c.label; });
+    d.pairs.forEach(function (p) { pairs[p.from + '>' + p.to] = p; });
+    var m = /from=([^&]+)/.exec(location.hash);
+    if (m) state.src = decodeURIComponent(m[1]);
+    legend(); wire(); render();
+    $('status').hidden = true; $('app').hidden = false;
+  }).catch(function () {
+    $('status').textContent = 'The compatibility table couldn’t load. Try reloading the page.';
+  });
+
+  // The key is drawn from the same labels, so show it with defaults until the data arrives.
+  label = { transfers: 'Transfers', adjusted: 'Transfers, adjusted', partial: 'Partial', in_progress: 'In progress', not_transferred: "Doesn't transfer", same_console_only: 'Same console only', not_checked: 'Not yet checked', not_applicable: 'Not applicable' };
+  legend();
+})();
+</script>
+</body></html>
