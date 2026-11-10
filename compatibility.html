@@ -101,7 +101,7 @@ h1{margin:0;font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:700;lett
 <main>
 <div class="intro">
 <div class="eyebrow">VESPER compatibility</div>
-<h1>What moves from your console to theirs</h1>
+<h1>See what moves between consoles</h1>
 <p class="lead">Pick the console your show is on. Every console VESPER writes is across the top, your own included, and each row is a setting.</p>
 <ul class="legend" id="legend" aria-label="Key"></ul>
 </div>
@@ -144,7 +144,7 @@ h1{margin:0;font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:700;lett
 (function () {
   // transfer-matrix.json is docs/transfer-matrix/transfer-matrix.json, read as generated.
   var DATA = 'transfer-matrix.json';
-  var CODE = { transfers: 'T', adjusted: 'A', partial: 'P', in_progress: 'W', not_transferred: 'N', same_console_only: 'S', not_checked: 'Q', not_applicable: 'X' };
+  var CODE = { transfers: 'T', adjusted: 'A', partial: 'P', in_progress: 'W', not_transferred: 'N', not_on_console: 'X', same_console_only: 'S', not_checked: 'Q', not_applicable: 'X' };
   var LEGEND = ['transfers', 'adjusted', 'partial', 'in_progress', 'not_transferred', 'same_console_only', 'not_checked', 'not_applicable'];
   var HINT = 'Point at any symbol to see what it means for that pair.';
 
@@ -306,7 +306,7 @@ h1{margin:0;font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:700;lett
   });
 
   // The key is drawn from the same labels, so show it with defaults until the data arrives.
-  label = { transfers: 'Transfers', adjusted: 'Transfers, adjusted', partial: 'Partial', in_progress: 'In progress', not_transferred: "Doesn't transfer", same_console_only: 'Same console only', not_checked: 'Not yet checked', not_applicable: 'Not applicable' };
+  label = { transfers: 'Transfers', adjusted: 'Transfers, adjusted', partial: 'Partial', in_progress: 'In progress', not_transferred: "Doesn't transfer", not_on_console: 'Not on this console', same_console_only: 'Same console only', not_checked: 'Not yet checked', not_applicable: 'Not applicable' };
   legend();
 })();
 </script>
