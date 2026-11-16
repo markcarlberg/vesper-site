@@ -256,7 +256,7 @@
     "A slope the eMotion LV1 doesn't offer is set to the nearest one.",
     "Settings outside the eMotion LV1's range are set to the nearest it allows.",
     "Inserts are listed with their point so you can rebuild them on the destination.",
-    "Outboard loops are listed with their sockets so you can repatch them where VESPER doesn't build them yet.",
+    "Outboard loops VESPER doesn't build yet are listed with their sockets.",
     "Follows the insert, which is rebuilt on the destination.",
     "The dMix has no equivalent.",
     "Held to the dMix's maximum of 250 ms.",
